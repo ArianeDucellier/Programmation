@@ -4,9 +4,13 @@ channels:
   - defaults
 dependencies:
   - python=3.7
+  - pip
   - jupyterlab
   - pandas
   - scikit-learn
+  - pytorch
   - matplotlib
-  - numpy<1.17
+  - numpy
   - scipy
+  - pip:
+    - torchvision
