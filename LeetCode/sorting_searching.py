@@ -1,15 +1,12 @@
 def findKthLargest(nums, k):
     """
     """
-    largest = []
+    largest = nums[0 : k]
     i = 0
-    while len(largest) < k:
-        if not(nums[i] in largest):
-            largest.append(nums[i])
-        i = i + 1
     while i < len(nums):
-        if nums[i] > max(largest):
-            largest.remove(min(largest))
+        if nums[i] >= min(largest):
+            index = largest.index(min(largest))
+            largest.pop(index)
             largest.append(nums[i])
         i = i + 1
     return min(largest)

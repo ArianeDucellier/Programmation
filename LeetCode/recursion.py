@@ -3,7 +3,7 @@ def reverseString(s):
     for i in range(0, n):
         s.insert(i, s[-1])
         s.pop()
-    print(s)
+    return s
 
 def letterCombination(digits):
     
@@ -32,3 +32,8 @@ def letterCombination(digits):
         return (digits, list_combi)
 
     return helper(digits, [''])[1]
+
+def getRow(rowIndex):
+    """
+    """
+    
