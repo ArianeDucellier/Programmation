@@ -5,6 +5,13 @@ class TreeNode(object):
          self.left = left
          self.right = right
 
+class Node:
+    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+
 class Solution(object):
 
     # Preorder traversal: Top->Bottom then Left->Right
@@ -262,6 +269,28 @@ class Solution(object):
             root.right = self.buildTree(inorder_right, postorder.copy())
         return root
 
+    # Populate next right pointers in each node
+    def connect(self, root: 'Node') -> 'Node':
+        """
+        """
+        old_level = [root]
+        new_level = []
+        if (root.left = None) and (root.right = None):
+            root.next = None
+            done = True
+        while done == False:
+            for (i, node) in enumerate(old_level):
+                node.left.next = node.right
+                new_level.append(node.left)
+                if (i == len(old_level) - 1):
+                    node.right.next = None
+                else:
+                    node.right.next = node.next.left
+                new_level.append(node.right)
+            if new_level[0].left == None:
+                done = True
+        return root
+                    
 def test_preorderTraversal_1():
     """
     Input: [1,null,2,3]
