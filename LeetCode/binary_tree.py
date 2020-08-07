@@ -275,20 +275,27 @@ class Solution(object):
         """
         old_level = [root]
         new_level = []
-        if (root.left = None) and (root.right = None):
+        done = False
+        if (root.left == None) and (root.right == None):
             root.next = None
             done = True
         while done == False:
-            for (i, node) in enumerate(old_level):
-                node.left.next = node.right
-                new_level.append(node.left)
-                if (i == len(old_level) - 1):
-                    node.right.next = None
+#        for j in range(0, 10):
+#            print(j)
+            for i in range(0, len(old_level)):
+                print(old_level[i].val, old_level[i].left, old_level[i].right)
+            for i in range(0, len(old_level)):
+                if old_level[i].left != None:
+                    old_level[i].left.next = old_level[i].right
+                new_level.append(old_level[i].left)
+                if old_level[i].next == None:
+                    old_level[i].right.next = None
                 else:
-                    node.right.next = node.next.left
-                new_level.append(node.right)
+                    old_level[i].right.next = old_level[i].next.left
+                new_level.append(old_level[i].right)
             if new_level[0].left == None:
                 done = True
+            old_level = new_level
         return root
                     
 def test_preorderTraversal_1():
@@ -505,6 +512,28 @@ def test_buildTree():
     tree = s.buildTree(inorder, postorder)
     printTree(tree)
 
+def test_connect():
+    """
+    Input: [1,2,3,4,5,6,7]
+    Output: [1,#,2,3,#,4,5,6,7,#]
+    """
+    s = Solution()
+    one = Node(1)
+    two = Node(2)
+    three = Node(3)
+    four = Node(4)
+    five = Node(5)
+    six = Node(6)
+    seven = Node(7)
+    one.left = two
+    one.right = three
+    two.left = four
+    two.right = five
+    three.left = six
+    three.right = seven
+    result = s.connect(one)
+    print(result)
+
 if __name__ == '__main__':
 
 #    test_preorderTraversal_1()
@@ -516,4 +545,5 @@ if __name__ == '__main__':
 #    test_isSymmetric()
 #    test_hasPathSum()
 #    test_countUnivalSubtrees()
-    test_buildTree()
+#    test_buildTree()
+   test_connect()
