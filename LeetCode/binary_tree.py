@@ -1,3 +1,5 @@
+import collections
+
 # To build tree nodes
 class TreeNode(object):
      def __init__(self, val=0, left=None, right=None):
@@ -248,7 +250,7 @@ class Solution(object):
         return nb
 
     # Get tree for inorder and postorder traversal
-    def buildTree(self, inorder, postorder):
+    def buildTree_1(self, inorder, postorder):
         """
         :type inorder: List[int]
         :type postorder: List[int]
@@ -263,41 +265,53 @@ class Solution(object):
         root = TreeNode(val) 
         inorder_left = inorder[0 : index]
         if inorder_left:
-            root.left = self.buildTree(inorder_left, postorder.copy())
+            root.left = self.buildTree_1(inorder_left, postorder.copy())
         inorder_right = inorder[index + 1 : ]
         if inorder_right:
-            root.right = self.buildTree(inorder_right, postorder.copy())
+            root.right = self.buildTree_1(inorder_right, postorder.copy())
+        return root
+
+    # Get tree for preorder and inorder traversal
+    def buildTree_2(self, preorder, inorder):
+        """
+        :type preorder: List[int]
+        :type inorder: List[int]
+        :rtype: TreeNode
+        """
+        if (inorder == []) or (preorder == []):
+            return None
+        val = None
+        while val not in inorder:
+            val = preorder.pop(0)
+        index = inorder.index(val)
+        root = TreeNode(val) 
+        inorder_left = inorder[0 : index]
+        if inorder_left:
+            root.left = self.buildTree_2(preorder.copy(), inorder_left)
+        inorder_right = inorder[index + 1 : ]
+        if inorder_right:
+            root.right = self.buildTree_2(preorder.copy(), inorder_right)
         return root
 
     # Populate next right pointers in each node
     def connect(self, root: 'Node') -> 'Node':
         """
         """
-        old_level = [root]
-        new_level = []
-        done = False
-        if (root.left == None) and (root.right == None):
-            root.next = None
-            done = True
-        while done == False:
-#        for j in range(0, 10):
-#            print(j)
-            for i in range(0, len(old_level)):
-                print(old_level[i].val, old_level[i].left, old_level[i].right)
-            for i in range(0, len(old_level)):
-                if old_level[i].left != None:
-                    old_level[i].left.next = old_level[i].right
-                new_level.append(old_level[i].left)
-                if old_level[i].next == None:
-                    old_level[i].right.next = None
-                else:
-                    old_level[i].right.next = old_level[i].next.left
-                new_level.append(old_level[i].right)
-            if new_level[0].left == None:
-                done = True
-            old_level = new_level
+        level = [root]
+        if not root:
+            return root
+        while level:
+            size = len(level)
+            for i in range(0, size):
+                node = level.pop(0)
+                if i < size - 1:
+                    node.next = level[0]
+                if node.left:
+                    level.append(node.left)
+                if node.right:
+                    level.append(node.right)
         return root
-                    
+
 def test_preorderTraversal_1():
     """
     Input: [1,null,2,3]
@@ -501,15 +515,46 @@ def printTree(tree):
         print('right tree')
         printTree(tree.right)
 
-def test_buildTree():
+def printNode(tree):
+    """
+    Input: Node
+    """
+    print('root = {}'.format(tree.val))
+    if tree.left == None:
+        print('no left leave')
+    else:
+        print('left tree')
+        printNode(tree.left)
+    if tree.right == None:
+        print('no right leave')
+    else:
+        print('right tree')
+        printNode(tree.right)
+    if tree.next == None:
+        print('no next node')
+    else:
+        print('next node = ', tree.next.val)
+
+def test_buildTree_1():
     """
     Input: [9,3,15,20,7], [9,15,7,20,3]
     Output: [3, 9, 20, None, None, 15, 7]
     """
     s = Solution()
     inorder = [9,3,15,20,7]
-    postorder = [9,15,7,20,3]
-    tree = s.buildTree(inorder, postorder)
+    postorder = [9,15,7,20,3]    
+    tree = s.buildTree_1(inorder, postorder)
+    printTree(tree)
+
+def test_buildTree_2():
+    """
+    Input: [3,9,20,15,7], [9,3,15,20,7]
+    Output: [3, 9, 20, None, None, 15, 7]
+    """
+    s = Solution()
+    preorder = [3,9,20,15,7]  
+    inorder = [9,3,15,20,7]
+    tree = s.buildTree_2(preorder, inorder)
     printTree(tree)
 
 def test_connect():
@@ -532,7 +577,12 @@ def test_connect():
     three.left = six
     three.right = seven
     result = s.connect(one)
-    print(result)
+    print('First tree\n')
+    printNode(result)
+    three.left = None
+    result = s.connect(one)
+    print('Second tree\n')
+    printNode(result)
 
 if __name__ == '__main__':
 
@@ -545,5 +595,6 @@ if __name__ == '__main__':
 #    test_isSymmetric()
 #    test_hasPathSum()
 #    test_countUnivalSubtrees()
-#    test_buildTree()
-   test_connect()
+#    test_buildTree_1()
+#    test_buildTree_2()
+    test_connect()
