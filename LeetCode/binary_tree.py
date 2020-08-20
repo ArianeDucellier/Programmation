@@ -312,6 +312,36 @@ class Solution(object):
                     level.append(node.right)
         return root
 
+    # Auxiliary function for lowestCommonAncestor
+    def get_ancestor(self, inorder, postorder, p, q):
+        """
+        """
+        ancestor = postorder.pop()
+        index = inorder.index(ancestor)
+        left = inorder[0 : index + 1]
+        right = inorder[index : ]
+        if (((p in left) and (q in right)) or ((p in right) and (q in left))):
+            return ancestor
+        else:
+            if p in left:
+                inorder = left
+                for value in right[1 :]:
+                    postorder.remove(value)
+            if p in right:
+                inorder = right
+                for value in left[: -1]:
+                    postorder.remove(value)
+            ancestor = self.get_ancestor(inorder, postorder, p, q)
+        
+    # Lowest common ancestor of a binary tree
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        """
+        """
+        inorder = self.inorderTraversal(root)
+        postorder = self.postorderTraversal(root)
+        ancestor = self.get_ancestor(inorder, postorder, p.val, q.val)
+        return ancestor
+
 def test_preorderTraversal_1():
     """
     Input: [1,null,2,3]
