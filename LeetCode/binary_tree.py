@@ -1,14 +1,13 @@
-import collections
+import copy
 
-# To build tree nodes
 class TreeNode(object):
-     def __init__(self, val=0, left=None, right=None):
-         self.val = val
-         self.left = left
-         self.right = right
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
-class Node:
-    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+class Node(object):
+    def __init__(self, val=0, left=None, right=None, next=None):
         self.val = val
         self.left = left
         self.right = right
@@ -17,7 +16,6 @@ class Node:
 class Solution(object):
 
     # Preorder traversal: Top->Bottom then Left->Right
-    # First version with space complexity O(N)
     def preorderTraversal_1(self, root):
         """
         :type root: TreeNode
@@ -192,6 +190,8 @@ class Solution(object):
         :type sum: int
         :rtype: bool
         """
+        if root == None:
+            return False     
         if (root.left == None) and (root.right == None):
             return (root.val == sum)
         else:
@@ -294,8 +294,10 @@ class Solution(object):
         return root
 
     # Populate next right pointers in each node
-    def connect(self, root: 'Node') -> 'Node':
+    def connect(self, root):
         """
+        :type root: Node
+        :rtype: Node
         """
         level = [root]
         if not root:
@@ -318,29 +320,34 @@ class Solution(object):
         """
         ancestor = postorder.pop()
         index = inorder.index(ancestor)
-        left = inorder[0 : index + 1]
-        right = inorder[index : ]
-        if (((p in left) and (q in right)) or ((p in right) and (q in left))):
-            return ancestor
+        inorder_left = inorder[0 : index + 1]
+        inorder_right = inorder[index : ]
+        if (((p.val in inorder_left) and (q.val in inorder_right)) or ((p.val in inorder_right) and (q.val in inorder_left))):
+            pass
         else:
-            if p in left:
-                inorder = left
-                for value in right[1 :]:
+            if p.val in inorder_left:
+                inorder = inorder_left[: -1]
+                for value in inorder_right[1 :]:
                     postorder.remove(value)
-            if p in right:
-                inorder = right
-                for value in left[: -1]:
+            if p.val in inorder_right:
+                inorder = inorder_right[1 :]
+                for value in inorder_left[: -1]:
                     postorder.remove(value)
             ancestor = self.get_ancestor(inorder, postorder, p, q)
+        return ancestor
         
     # Lowest common ancestor of a binary tree
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+    def lowestCommonAncestor(self, root, p, q):
         """
+        :type root: TreeNode
+        :type p: TreeNode
+        :type q: TreeNode
+        :rtype: TreeNode
         """
-        inorder = self.inorderTraversal(root)
-        postorder = self.postorderTraversal(root)
-        ancestor = self.get_ancestor(inorder, postorder, p.val, q.val)
-        return ancestor
+        inorder = self.inorderTraversal(copy.deepcopy(root))
+        postorder = self.postorderTraversal(copy.deepcopy(root))
+        ancestor = self.get_ancestor(inorder, postorder, p, q)
+        return TreeNode(val=ancestor)
 
 def test_preorderTraversal_1():
     """
@@ -614,6 +621,34 @@ def test_connect():
     print('Second tree\n')
     printNode(result)
 
+def test_lowestCommonAncestor():
+    """
+    """
+    s = Solution()
+    zero = TreeNode(0)
+    one = TreeNode(1)
+    two = TreeNode(2)
+    three = TreeNode(3)
+    four = TreeNode(4)
+    five = TreeNode(5)
+    six = TreeNode(6)
+    seven = TreeNode(7)
+    eight = TreeNode(8)
+    three.left = five
+    three.right = one
+    five.left = six
+    five.right = two
+    two.left = seven
+    two.right = four
+    one.left = zero
+    one.right = eight
+#    result = s.lowestCommonAncestor(three, five, one)
+#    print('First pair: Ancestor = {}'.format(result))
+#    print('\n')
+    result = s.lowestCommonAncestor(three, five, four)
+    print('Second pair: Ancestor = {}'.format(result))
+    print('\n')
+
 if __name__ == '__main__':
 
 #    test_preorderTraversal_1()
@@ -627,4 +662,5 @@ if __name__ == '__main__':
 #    test_countUnivalSubtrees()
 #    test_buildTree_1()
 #    test_buildTree_2()
-    test_connect()
+#    test_connect()
+    test_lowestCommonAncestor()
