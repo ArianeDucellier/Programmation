@@ -1,11 +1,21 @@
-def search(nums, target):
-    location = -1
-    index = 0
-    while (location == -1 and index < len(nums)):
-        if (nums[index] == target):
-            location = index
-        index = index + 1
-    return location
+class Solution(object):
+    def search(self, nums, target):
+        """
+        :type nums: List[int]
+        :type target: int
+        :rtype: int
+        """
+        left = 0
+        right = len(nums) - 1
+        while (left <= right):
+            middle = (left + right) // 2
+            if (nums[middle] == target):
+                return middle
+            if (nums[middle] > target):
+                right = middle - 1
+            else:
+                left = middle + 1
+        return -1
 
 def mySqrt(x):
     left = 0

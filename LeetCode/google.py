@@ -12,7 +12,6 @@ def DFS(adj):
                 break
     stack = [start]
     result = [start]
-    adj[start, start] = 0
     while len(stack) > 0:
         last = stack[-1]
         neighbors = False
@@ -21,9 +20,6 @@ def DFS(adj):
                 stack.append(i)
                 if (i not in result):
                     result.append(i)
-                adj[last, i] = 0
-                adj[i, last] = 0
-                adj[i, i] = 0
                 neighbors = True
                 break
         if neighbors == False:
