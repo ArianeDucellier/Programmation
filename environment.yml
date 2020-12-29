@@ -1,16 +1,14 @@
-name: programmation
+name: MLlabs
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.7
-  - pip
-  - jupyterlab
-  - pandas
-  - scikit-learn
-  - pytorch
+  - python=3.9
+  - jupyter
   - matplotlib
   - numpy
+  - pandas
   - scipy
-  - pip:
-    - torchvision
+  - scikit-learn
+  - pytorch
+
