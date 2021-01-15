@@ -29,6 +29,26 @@ class Solution(object):
                 largest.append(nums[i])
         return (min(largest))
 
+    def prisonAfterNDays(self, cells, N):
+        """
+        :type cells: List[int]
+        :type N: int
+        :rtype: List[int]
+        """
+#        print('Day 0:', cells)
+        for i in range(0, N):
+            cells_copy = []
+            cells_copy.append(0)
+            for j in range(1, len(cells) - 1):
+                if cells[j - 1] == cells[j + 1]:
+                    cells_copy.append(1)
+                else:
+                    cells_copy.append(0)
+            cells_copy.append(0)
+            cells = cells_copy
+#            print('Day {:d}:'.format(i + 1), cells)
+        return cells
+
 class LRUCache(object):
 
     def __init__(self, capacity):
@@ -104,7 +124,22 @@ def test_findKthLargest():
     result = s.findKthLargest([3,2,3,1,2,4,5,5,6], 4)
     print(result)
 
+def test_prisonAfterNDays():
+    """
+    Input: cells = [0,1,0,1,1,0,0,1], N = 7
+    Output: [0,0,1,1,0,0,0,0]
+    Input: cells = [1,0,0,1,0,0,1,0], N = 1000000000
+    Output: [0,0,1,1,1,1,1,0]
+    """
+    print('prisonAfterNDays')
+    s = Solution()
+    result = s.prisonAfterNDays([0,1,0,1,1,0,0,1], 7)
+    print(result)
+    result = s.prisonAfterNDays([1,0,0,1,0,0,1,0], 1000000000)
+    print(result)
+
 if __name__ == '__main__':
 
 #    test_twoSum()
-    test_findKthLargest()
+#    test_findKthLargest()
+    test_prisonAfterNDays()
