@@ -35,8 +35,9 @@ class Solution(object):
         :type N: int
         :rtype: List[int]
         """
-#        print('Day 0:', cells)
-        for i in range(0, N):
+        all_cells = []
+        while cells not in all_cells:
+            all_cells.append(cells)
             cells_copy = []
             cells_copy.append(0)
             for j in range(1, len(cells) - 1):
@@ -46,8 +47,11 @@ class Solution(object):
                     cells_copy.append(0)
             cells_copy.append(0)
             cells = cells_copy
-#            print('Day {:d}:'.format(i + 1), cells)
-        return cells
+        print('one')
+        print(all_cells)
+        uniques = len(all_cells)
+        index = N % uniques
+        return all_cells[index]
 
 class LRUCache(object):
 
@@ -131,12 +135,12 @@ def test_prisonAfterNDays():
     Input: cells = [1,0,0,1,0,0,1,0], N = 1000000000
     Output: [0,0,1,1,1,1,1,0]
     """
-    print('prisonAfterNDays')
+#    print('prisonAfterNDays')
     s = Solution()
-    result = s.prisonAfterNDays([0,1,0,1,1,0,0,1], 7)
-    print(result)
-    result = s.prisonAfterNDays([1,0,0,1,0,0,1,0], 1000000000)
-    print(result)
+#    result = s.prisonAfterNDays([0,1,0,1,1,0,0,1], 7)
+#    print(result)
+    result = s.prisonAfterNDays([1,0,0,1,0,0,1,0], 257)
+#    print(result)
 
 if __name__ == '__main__':
 
