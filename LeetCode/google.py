@@ -28,6 +28,29 @@ def DFS(adj):
 
 class Solution:
 
+    def format_email(self, email):
+        """
+        Auxiliary function for numUniqueEmails
+        """
+        pos = email.find('@')
+        local = email[0:pos]
+        domain = email[pos + 1:]
+        local = local.replace('.', '')
+        pos = local.find('+')
+        if pos != -1:
+            local = local[0:pos]
+        email = local + '@' + domain
+        return email
+
+    def numUniqueEmails(self, emails):
+        """
+        :type emails: List[str]
+        :rtype: int
+        """
+        emails = [self.format_email(email) for email in emails]
+        emails = list(set(emails))
+        return len(emails)
+
     def numIslands(self, grid):
         """
         """
@@ -57,6 +80,21 @@ class Solution:
                         number[i, j] = nb_islands + 1
         print(number)
         return int(np.max(np.max(number)))
+
+def test_numUniqueEmails():
+    """
+    """
+    s = Solution()
+    emails = ["test.email+alex@leetcode.com", "test.e.mail+bob.cathy@leetcode.com", "testemail+david@lee.tcode.com"]
+    result = s.numUniqueEmails(emails)
+    print('First input')
+    print(result)
+    print('\n')
+    emails = ["a@leetcode.com", "b@leetcode.com", "c@leetcode.com"]
+    result = s.numUniqueEmails(emails)
+    print('Second input')
+    print(result)
+    print('\n')
 
 def test_numIslands():
     """
@@ -110,4 +148,5 @@ def test_DFS():
 if __name__ == '__main__':
 
 #    test_numIslands()
-    test_DFS()
+#    test_DFS()
+    test_numUniqueEmails()
